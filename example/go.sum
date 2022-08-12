@@ -1,4 +1,6 @@
 github.com/golang-jwt/jwt v3.2.2+incompatible h1:IfV12K8xAKAnZqdXVzCZ+TOjboZ2keLg81eXfW3O+oY=
 github.com/golang-jwt/jwt v3.2.2+incompatible/go.mod h1:8pz2t5EyA70fFQQSrl6XZXzqecmYZeUEB8OUGHkxJ+I=
+github.com/salrashid123/golang-jwt-signer v0.0.0-20220812192832-075740dcd524 h1:7xPnaviz5+SuN3Way3Cpp2UcLY0dA+azRNS0p4VzrJg=
+github.com/salrashid123/golang-jwt-signer v0.0.0-20220812192832-075740dcd524/go.mod h1:1h3cy7xoTvckTenTLvAla8s0Z7iRrDez/RodSyMpGhM=
 github.com/salrashid123/signer/pem v0.0.0-20220718102027-af49b1c9153d h1:SqY9f2mYfPobTwwHqW3FXPRAtYzBk7VrpLPvpxKbiRI=
 github.com/salrashid123/signer/pem v0.0.0-20220718102027-af49b1c9153d/go.mod h1:ubge4ZKbdCTGpQRmnl2GRF+iXEYf5aPbIaLyGETaX7c=

@@ -5,15 +5,13 @@ import (
 	"crypto/x509"
 	"encoding/pem"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"time"
 
 	//"github.com/go-piv/piv-go/piv"
-	"github.com/golang-jwt/jwt"
+	jwt "github.com/golang-jwt/jwt/v5"
 	jwtsigner "github.com/salrashid123/golang-jwt-signer"
-	salpem "github.com/salrashid123/signer/pem"
 	// salkms "github.com/salrashid123/signer/kms"
 	// saltpm "github.com/salrashid123/signer/tpm"
 	// "github.com/ThalesIgnite/crypto11"
@@ -28,28 +26,22 @@ func main() {
 
 	// first initialize a crypto.Signer
 
-	// demo signer
-	r, err := salpem.NewPEMCrypto(&salpem.PEM{
-		PrivatePEMFile: "client_rsa.key",
-	})
-
-	// // rsa.PrivateKey also implements a crypto.Signer
-	// // https://pkg.go.dev/crypto/rsa#PrivateKey.Sign
-	// privatePEM, err := ioutil.ReadFile("client_rsa.key")
-	// if err != nil {
-	// 	fmt.Printf("error getting signer %v", err)
-	// 	os.Exit(0)
-	// }
-	// rblock, _ := pem.Decode(privatePEM)
-	// if rblock == nil {
-	// 	fmt.Printf("error getting signer %v", err)
-	// 	os.Exit(0)
-	// }
-	// r, err := x509.ParsePKCS1PrivateKey(rblock.Bytes)
-	// if err != nil {
-	// 	fmt.Printf("error getting signer %v", err)
-	// 	os.Exit(0)
-	// }
+	// demo signer RSA
+	privatePEM, err := os.ReadFile("certs/client_rsa.key")
+	if err != nil {
+		fmt.Printf("error getting signer %v", err)
+		os.Exit(0)
+	}
+	rblock, _ := pem.Decode(privatePEM)
+	if rblock == nil {
+		fmt.Printf("error getting signer %v", err)
+		os.Exit(0)
+	}
+	r, err := x509.ParsePKCS1PrivateKey(rblock.Bytes)
+	if err != nil {
+		fmt.Printf("error getting signer %v", err)
+		os.Exit(0)
+	}
 
 	// ############# KMS
 
@@ -139,10 +131,10 @@ func main() {
 		os.Exit(0)
 	}
 
-	// ===================================
+	// ===================================  RSA
 
-	claims := &jwt.StandardClaims{
-		ExpiresAt: time.Now().Add(time.Minute * 1).Unix(),
+	claims := &jwt.RegisteredClaims{
+		ExpiresAt: &jwt.NumericDate{time.Now().Add(time.Minute * 1)},
 		Issuer:    "test",
 	}
 
@@ -177,34 +169,6 @@ func main() {
 	}
 	if vtoken.Valid {
 		log.Println("     verified with Signer PublicKey")
-	}
-
-	// verify with provided RSAPublic key
-
-	rc, err := ioutil.ReadFile("client.crt")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	block, _ := pem.Decode(rc)
-
-	c, err := x509.ParseCertificate(block.Bytes)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	pubKey := c.PublicKey
-
-	v, err := jwt.Parse(vtoken.Raw, func(token *jwt.Token) (interface{}, error) {
-		return pubKey, nil
-	})
-	if err != nil {
-		log.Fatalf("Error verifying token %v", err)
-	}
-	if v.Valid {
-		log.Println("     verified with exported PubicKey")
 	}
 
 }

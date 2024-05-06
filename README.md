@@ -22,8 +22,17 @@ For other references, see:
 * [golang-jwt for Trusted Platform Module TPM](https://github.com/salrashid123/golang-jwt-tpm)
 * [golang-jwt for Yubikey](https://github.com/salrashid123/golang-jwt-yubikey)
 * [golang-jwt for PKCS11](https://github.com/salrashid123/golang-jwt-pkcs11)
+* [golang-jwt for TPM](https://github.com/salrashid123/golang-jwt-tpm)
 * [crypto.Signer, implementations for Google Cloud KMS and Trusted Platform Modules](https://github.com/salrashid123/signer)
 * [go-tpm-tools Signer](https://pkg.go.dev/github.com/google/go-tpm-tools/client#Key.GetSigner)
+
+### Supported Algorithms
+
+* `RS256`
+* `PS256`
+* `ES256`
+
+### Usage
 
 Using this is really easy...you just need something that surfaces that interface.
 
@@ -36,19 +45,11 @@ The following shows the PEM signer and Google Cloud KMS based signers:
 package main
 
 import (
-	"context"
-	"crypto/x509"
-	"encoding/pem"
-	"fmt"
-	"io/ioutil"
-	"log"
-	"os"
-	"time"
 
 	//"github.com/go-piv/piv-go/piv"
-	"github.com/golang-jwt/jwt"
+	jwt "github.com/golang-jwt/jwt/v5"
 	jwtsigner "github.com/salrashid123/golang-jwt-signer"
-	salpem "github.com/salrashid123/signer/pem"
+
 	// salkms "github.com/salrashid123/signer/kms"
 	// saltpm "github.com/salrashid123/signer/tpm"
 	// "github.com/ThalesIgnite/crypto11"
@@ -61,29 +62,11 @@ func main() {
 
 	ctx := context.Background()
 
-	// fake signer
-	r, err := salpem.NewPEMCrypto(&salpem.PEM{
-		PrivatePEMFile: "client_rsa.key",
-	})
-
 	// // rsa.PrivateKey also implements  crypto.Signer
 	// // https://pkg.go.dev/crypto/rsa#PrivateKey.Sign
-	// privatePEM, err := ioutil.ReadFile("client_rsa.key")
-	// if err != nil {
-	// 	fmt.Printf("error getting signer %v", err)
-	// 	os.Exit(0)
-	// }
-	// rblock, _ := pem.Decode(privatePEM)
-	// if rblock == nil {
-	// 	fmt.Printf("error getting signer %v", err)
-	// 	os.Exit(0)
-	// }
-	// r, err := x509.ParsePKCS1PrivateKey(rblock.Bytes)
-	// if err != nil {
-	// 	fmt.Printf("error getting signer %v", err)
-	// 	os.Exit(0)
-	// }
-
+	privatePEM, err := os.ReadFile("client_rsa.key")
+	rblock, _ := pem.Decode(privatePEM)
+	r, err := x509.ParsePKCS1PrivateKey(rblock.Bytes)
 
 	// ############# KMS
 
@@ -106,10 +89,6 @@ func main() {
 	// ############# Yubikey
 
 	// cards, err := piv.Cards()
-	// if err != nil {
-	// 	fmt.Printf("unable to open yubikey %v", err)
-	// 	os.Exit(1)
-	// }
 	// var ykey *piv.YubiKey
 	// for _, card := range cards {
 	// 	if strings.Contains(strings.ToLower(card), "yubikey") {
@@ -120,30 +99,13 @@ func main() {
 	// 		break
 	// 	}
 	// }
-	// if ykey == nil {
-	// 	fmt.Printf("yubikey not found Please make sure the key is inserted %v", err)
-	// 	os.Exit(1)
-	// }
 	// defer ykey.Close()
 
 	// cert, err := ykey.Certificate(piv.SlotSignature)
-	// if err != nil {
-	// 	fmt.Printf("unable to load certificate not found %v", err)
-	// 	os.Exit(0)
-	// }
-
 	// auth := piv.KeyAuth{PIN: piv.DefaultPIN}
 	// priv, err := ykey.PrivateKey(piv.SlotSignature, cert.PublicKey, auth)
-	// if err != nil {
-	// 	fmt.Printf("unable to load privateKey %v", err)
-	// 	os.Exit(0)
-	// }
-
 	// r, ok := priv.(crypto.Signer)
-	// if !ok {
-	// 	fmt.Printf("expected private key to implement crypto.Signer")
-	// 	os.Exit(0)
-	// }
+
 
 	// ############# PKCS11
 
@@ -155,10 +117,7 @@ func main() {
 	// }
 
 	// cctx, err := crypto11.Configure(config)
-	// if err != nil {
-	// 	fmt.Printf("error creating pkcs11 config%v", err)
-	// 	os.Exit(0)
-	// }
+
 	// defer cctx.Close()
 
 	// r, err := salpkcs.NewPKCSCrypto(&salpkcs.PKCS{
@@ -168,15 +127,11 @@ func main() {
 	// 	PublicCertFile: "client.crt",        //softhsm
 	// })
 
-	if err != nil {
-		fmt.Printf("error getting signer %v", err)
-		os.Exit(0)
-	}
 
 	// ===================================
 
-	claims := &jwt.StandardClaims{
-		ExpiresAt: time.Now().Add(time.Minute * 1).Unix(),
+	claims := &jwt.RegisteredClaims{
+		ExpiresAt: &jwt.NumericDate{time.Now().Add(time.Minute * 1)},
 		Issuer:    "test",
 	}
 
@@ -186,59 +141,22 @@ func main() {
 	keyctx, err := jwtsigner.NewSignerContext(ctx, &jwtsigner.SignerConfig{
 		Signer: r,
 	})
-	if err != nil {
-		log.Fatalf("Unable to initialize signer: %v", err)
-	}
+
 	token.Header["kid"] = "1212"
 
 	tokenString, err := token.SignedString(keyctx)
-	if err != nil {
-		log.Fatalf("Error signing %v", err)
-	}
+
 	fmt.Printf("TOKEN: %s\n", tokenString)
 
 	// // verify with embedded publickey
 	keyFunc, err := jwtsigner.SignerVerfiyKeyfunc(ctx, &jwtsigner.SignerConfig{
 		Signer: r,
 	})
-	if err != nil {
-		log.Fatalf("could not get keyFunc: %v", err)
-	}
 
 	vtoken, err := jwt.Parse(tokenString, keyFunc)
-	if err != nil {
-		log.Fatalf("Error verifying token %v", err)
-	}
+
 	if vtoken.Valid {
 		log.Println("     verified with Signer PublicKey")
-	}
-
-	// verify with provided RSAPublic key
-
-	rc, err := ioutil.ReadFile("client.crt")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	block, _ := pem.Decode(rc)
-
-	c, err := x509.ParseCertificate(block.Bytes)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	pubKey := c.PublicKey
-
-	v, err := jwt.Parse(vtoken.Raw, func(token *jwt.Token) (interface{}, error) {
-		return pubKey, nil
-	})
-	if err != nil {
-		log.Fatalf("Error verifying token %v", err)
-	}
-	if v.Valid {
-		log.Println("     verified with exported PubicKey")
 	}
 
 }
@@ -254,20 +172,3 @@ TOKEN: eyJhbGciOiJSUzI1NiIsImtpZCI6IjEyMTIiLCJ0eXAiOiJKV1QifQ.eyJleHAiOjE2NjAzMj
 2022/08/12 14:40:37      verified with Signer PublicKey
 2022/08/12 14:40:37      verified with exported PubicKey
 ```
-
-
-
-The JWT is formatted as:
-
-```json
-{
-  "alg": "RS256",
-  "kid": "1212",
-  "typ": "JWT"
-}
-{
-  "exp": 1660329697,
-  "iss": "test"
-}
-```
-

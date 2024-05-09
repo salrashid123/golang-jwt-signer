@@ -10,6 +10,7 @@ import (
 	"time"
 
 	//"github.com/go-piv/piv-go/piv"
+
 	jwt "github.com/golang-jwt/jwt/v5"
 	jwtsigner "github.com/salrashid123/golang-jwt-signer"
 	// salkms "github.com/salrashid123/signer/kms"
@@ -46,19 +47,18 @@ func main() {
 	// ############# KMS
 
 	// r, err := salkms.NewKMSCrypto(&salkms.KMS{
-	// 	ProjectId:          "mineral-minutia-820",
-	// 	LocationId:         "us-central1",
-	// 	KeyRing:            "kr",
-	// 	Key:                "s",
-	// 	KeyVersion:         "1",
+	// 	ProjectId:  "srashid-test2",
+	// 	LocationId: "us-central1",
+	// 	KeyRing:    "kr",
+	// 	Key:        "rskey1",
+	// 	KeyVersion: "1",
 	// })
 
 	// ############# TPM
 
 	// r, err := saltpm.NewTPMCrypto(&saltpm.TPM{
-	// 	TpmDevice:     "/dev/tpm0",
-	// 	TpmHandleFile: "/tmp/key.bin",
-	// 	//TpmHandle:     0x81010002,
+	// 	TpmPath:   "/dev/tpm0",
+	// 	KeyHandle: uint32(0x81008001),
 	// })
 
 	// ############# Yubikey
@@ -105,7 +105,7 @@ func main() {
 
 	// ############# PKCS11
 
-	// export SOFTHSM2_CONF=/path/to/softhsm.conf
+	// export SOFTHSM2_CONF=/tmp/golang-jwt-pkcs11/test_data/softhsm.conf
 	// config := &crypto11.Config{
 	// 	Path:       "/usr/lib/x86_64-linux-gnu/softhsm/libsofthsm2.so",
 	// 	TokenLabel: "token1",
@@ -123,13 +123,13 @@ func main() {
 	// 	Context:        cctx,
 	// 	PkcsId:         nil,                 //softhsm
 	// 	PkcsLabel:      []byte("keylabel1"), //softhsm
-	// 	PublicCertFile: "client.crt",        //softhsm
+	// 	PublicCertFile: "client.crt",        //softhsm, if the hsm device does not include a cert, specify it here
 	// })
 
-	if err != nil {
-		fmt.Printf("error getting signer %v", err)
-		os.Exit(0)
-	}
+	// if err != nil {
+	// 	fmt.Printf("error getting signer %v", err)
+	// 	os.Exit(0)
+	// }
 
 	// ===================================  RSA
 
@@ -147,7 +147,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Unable to initialize signer: %v", err)
 	}
-	token.Header["kid"] = "1212"
+	token.Header["kid"] = "4142"
 
 	tokenString, err := token.SignedString(keyctx)
 	if err != nil {

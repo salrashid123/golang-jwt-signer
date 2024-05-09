@@ -68,7 +68,7 @@ func main() {
 	rblock, _ := pem.Decode(privatePEM)
 	r, err := x509.ParsePKCS1PrivateKey(rblock.Bytes)
 
-	// ############# KMS
+	// ############# for a KMS signer
 
 	// r, err := salkms.NewKMSCrypto(&salkms.KMS{
 	// 	ProjectId:          "mineral-minutia-820",
@@ -78,15 +78,14 @@ func main() {
 	// 	KeyVersion:         "1",
 	// })
 
-	// ############# TPM
+	// ############# for a TPM singer
 
 	// r, err := saltpm.NewTPMCrypto(&saltpm.TPM{
-	// 	TpmDevice:     "/dev/tpm0",
-	// 	TpmHandleFile: "/tmp/key.bin",
-	// 	//TpmHandle:     0x81010002,
+	// 	TpmPath:     "/dev/tpm0",
+	// 	KeyHandle: uint32(0x81010002),
 	// })
 
-	// ############# Yubikey
+	// ############# for a Yubikey singer
 
 	// cards, err := piv.Cards()
 	// var ykey *piv.YubiKey
@@ -107,7 +106,7 @@ func main() {
 	// r, ok := priv.(crypto.Signer)
 
 
-	// ############# PKCS11
+	// ############# for a general PKCS11 signer
 
 	// export SOFTHSM2_CONF=/path/to/softhsm.conf
 	// config := &crypto11.Config{

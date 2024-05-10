@@ -123,7 +123,6 @@ func main() {
 	// 	Context:        cctx,
 	// 	PkcsId:         nil,                 //softhsm
 	// 	PkcsLabel:      []byte("keylabel1"), //softhsm
-	// 	PublicCertFile: "client.crt",        //softhsm
 	// })
 
 

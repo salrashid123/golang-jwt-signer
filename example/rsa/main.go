@@ -120,10 +120,9 @@ func main() {
 	// defer cctx.Close()
 
 	// r, err := salpkcs.NewPKCSCrypto(&salpkcs.PKCS{
-	// 	Context:        cctx,
-	// 	PkcsId:         nil,                 //softhsm
-	// 	PkcsLabel:      []byte("keylabel1"), //softhsm
-	// 	PublicCertFile: "client.crt",        //softhsm, if the hsm device does not include a cert, specify it here
+	// 	Context:   cctx,
+	// 	PkcsId:    nil,                 //softhsm
+	// 	PkcsLabel: []byte("keylabel1"), //softhsm
 	// })
 
 	// if err != nil {

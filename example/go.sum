@@ -74,6 +74,8 @@ github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZN
 github.com/prometheus/client_model v0.0.0-20190812154241-14fe0d1b01d4/go.mod h1:xMI15A0UPsDsEKsMN9yxemIoYk6Tm2C1GtYGdfGttqA=
 github.com/salrashid123/mtls_pkcs11/signer/pkcs v0.0.0-20240409112057-e6fd3b9f0945 h1:yowMf/xR/oeR642HGc1u1KmmXnWLk7C7qDs5niAFWoQ=
 github.com/salrashid123/mtls_pkcs11/signer/pkcs v0.0.0-20240409112057-e6fd3b9f0945/go.mod h1:NbwMTv56G4w5oGGAfT5faUTaHbEQOIcFyG9957710FI=
+github.com/salrashid123/mtls_pkcs11/signer/pkcs v0.0.0-20240509233410-a73ce04a2b72 h1:8RgerftuPvGEYnpAp5co/iajwpOQ+d+iD3di6jmDzco=
+github.com/salrashid123/mtls_pkcs11/signer/pkcs v0.0.0-20240509233410-a73ce04a2b72/go.mod h1:NbwMTv56G4w5oGGAfT5faUTaHbEQOIcFyG9957710FI=
 github.com/salrashid123/signer/kms v0.0.0-20240506142117-142e7dba6e3a h1:cK9mCrWgCaoM+CJ74bpZcedhEiw6RERhW6JU898OYv8=
 github.com/salrashid123/signer/kms v0.0.0-20240506142117-142e7dba6e3a/go.mod h1:v4n0rkyQNOMMOYqIpqN1WjRBTY1/zrArKOeen8dkYZ8=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=

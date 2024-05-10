@@ -25,7 +25,7 @@ require (
 	github.com/googleapis/gax-go/v2 v2.12.3 // indirect
 	github.com/miekg/pkcs11 v1.0.3-0.20190429190417-a667d056470f // indirect
 	github.com/pkg/errors v0.8.1 // indirect
-	github.com/salrashid123/mtls_pkcs11/signer/pkcs v0.0.0-20240409112057-e6fd3b9f0945 // indirect
+	github.com/salrashid123/mtls_pkcs11/signer/pkcs v0.0.0-20240509233410-a73ce04a2b72 // indirect
 	github.com/thales-e-security/pool v0.0.2 // indirect
 	go.opencensus.io v0.24.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.49.0 // indirect

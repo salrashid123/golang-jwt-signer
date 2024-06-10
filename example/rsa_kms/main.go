@@ -2,21 +2,15 @@ package main
 
 import (
 	"context"
-	"crypto/x509"
-	"encoding/pem"
 	"fmt"
 	"log"
-	"os"
 	"time"
 
 	//"github.com/go-piv/piv-go/piv"
 
 	jwt "github.com/golang-jwt/jwt/v5"
 	jwtsigner "github.com/salrashid123/golang-jwt-signer"
-	// salkms "github.com/salrashid123/signer/kms"
-	// saltpm "github.com/salrashid123/signer/tpm"
-	// "github.com/ThalesIgnite/crypto11"
-	// salpkcs "github.com/salrashid123/mtls_pkcs11/signer/pkcs"
+	salkms "github.com/salrashid123/signer/kms"
 )
 
 var ()
@@ -25,29 +19,13 @@ func main() {
 
 	ctx := context.Background()
 
-	// first initialize a crypto.Signer
-
-	// i'm just using a plain rsa key which implements the singer.
-	// see the README.md in this repo for examples with TPM, KMS, PKCS-11
-
-	// demo signer RSA
-	privatePEM, err := os.ReadFile("certs/client_rsa.key")
-	if err != nil {
-		fmt.Printf("error getting signer %v", err)
-		os.Exit(0)
-	}
-	rblock, _ := pem.Decode(privatePEM)
-	if rblock == nil {
-		fmt.Printf("error getting signer %v", err)
-		os.Exit(0)
-	}
-	r, err := x509.ParsePKCS1PrivateKey(rblock.Bytes)
-	if err != nil {
-		fmt.Printf("error getting signer %v", err)
-		os.Exit(0)
-	}
-
-	// ===================================  RSA
+	r, err := salkms.NewKMSCrypto(&salkms.KMS{
+		ProjectId:  "core-eso",
+		LocationId: "us-central1",
+		KeyRing:    "kr",
+		Key:        "rskey1",
+		KeyVersion: "1",
+	})
 
 	claims := &jwt.RegisteredClaims{
 		ExpiresAt: &jwt.NumericDate{time.Now().Add(time.Minute * 1)},

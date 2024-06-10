@@ -1,10 +1,16 @@
 module main
 
-go 1.20
+go 1.22
+
+toolchain go1.22.2
 
 require (
+	github.com/ThalesIgnite/crypto11 v1.2.5
 	github.com/golang-jwt/jwt/v5 v5.2.1
+	github.com/google/go-tpm v0.9.1
+	github.com/google/go-tpm-tools v0.4.4
 	github.com/salrashid123/golang-jwt-signer v0.0.0
+	github.com/salrashid123/mtls_pkcs11/signer/pkcs v0.0.0-20240607212947-825eb0de11bc
 	github.com/salrashid123/signer/kms v0.0.0-20240506142117-142e7dba6e3a
 )
 
@@ -13,19 +19,22 @@ require (
 	cloud.google.com/go/compute/metadata v0.2.3 // indirect
 	cloud.google.com/go/iam v1.1.7 // indirect
 	cloud.google.com/go/kms v1.15.8 // indirect
-	github.com/ThalesIgnite/crypto11 v1.2.5 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/go-logr/logr v1.4.1 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
-	github.com/go-piv/piv-go v1.11.0 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
+	github.com/google/go-configfs-tsm v0.2.2 // indirect
+	github.com/google/go-sev-guest v0.9.3 // indirect
+	github.com/google/go-tdx-guest v0.3.1 // indirect
+	github.com/google/logger v1.1.1 // indirect
 	github.com/google/s2a-go v0.1.7 // indirect
+	github.com/google/uuid v1.6.0 // indirect
 	github.com/googleapis/enterprise-certificate-proxy v0.3.2 // indirect
 	github.com/googleapis/gax-go/v2 v2.12.3 // indirect
 	github.com/miekg/pkcs11 v1.0.3-0.20190429190417-a667d056470f // indirect
-	github.com/pkg/errors v0.8.1 // indirect
-	github.com/salrashid123/mtls_pkcs11/signer/pkcs v0.0.0-20240509233410-a73ce04a2b72 // indirect
+	github.com/pborman/uuid v1.2.1 // indirect
+	github.com/pkg/errors v0.9.1 // indirect
 	github.com/thales-e-security/pool v0.0.2 // indirect
 	go.opencensus.io v0.24.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.49.0 // indirect
@@ -33,6 +42,7 @@ require (
 	go.opentelemetry.io/otel v1.24.0 // indirect
 	go.opentelemetry.io/otel/metric v1.24.0 // indirect
 	go.opentelemetry.io/otel/trace v1.24.0 // indirect
+	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/crypto v0.21.0 // indirect
 	golang.org/x/net v0.23.0 // indirect
 	golang.org/x/oauth2 v0.18.0 // indirect

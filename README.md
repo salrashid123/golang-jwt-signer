@@ -36,10 +36,7 @@ For other references, see:
 
 Using this is really easy...you just need something that surfaces that interface.
 
-I've written some simple ones here...the `examples/` folder uses a _PEM Signer_  (yes i'm well aware go-jwt already supports PEM format keys...i just happened to make a Signer so i could test the other ones)
-
-
-The following shows the PEM signer and Google Cloud KMS based signers:
+I've written some simple ones here...the `examples/` folder for TPM, KMS and PKCS.
 
 ```golang
 package main
@@ -71,18 +68,28 @@ func main() {
 	// ############# for a KMS signer
 
 	// r, err := salkms.NewKMSCrypto(&salkms.KMS{
-	// 	ProjectId:          "mineral-minutia-820",
-	// 	LocationId:         "us-central1",
-	// 	KeyRing:            "kr",
-	// 	Key:                "s",
-	// 	KeyVersion:         "1",
+	// 	ProjectId:  "your_project_id",
+	// 	LocationId: "us-central1",
+	// 	KeyRing:    "kr",
+	// 	Key:        "rskey1",
+	// 	KeyVersion: "1",
 	// })
 
 	// ############# for a TPM singer
 
+	// k, err := client.LoadCachedKey(rwc, tpmutil.Handle(*persistentHandle), nil)
+	// rwc, err := OpenTPM(*tpmPath)
+	// rwr := transport.FromReadWriter(rwc)
+	// pub, err := tpm2.ReadPublic{
+	// 	ObjectHandle: tpm2.TPMHandle(*handle),
+	// }.Execute(rwr)
+
 	// r, err := saltpm.NewTPMCrypto(&saltpm.TPM{
-	// 	TpmPath:     "/dev/tpm0",
-	// 	KeyHandle: uint32(0x81010002),
+	// 	TpmDevice: rwc,
+	// 	NamedHandle: &tpm2.NamedHandle{
+	// 		Handle: tpm2.TPMHandle(*handle),
+	// 		Name:   pub.Name,
+	// 	},
 	// })
 
 	// ############# for a Yubikey singer
@@ -116,7 +123,6 @@ func main() {
 	// }
 
 	// cctx, err := crypto11.Configure(config)
-
 	// defer cctx.Close()
 
 	// r, err := salpkcs.NewPKCSCrypto(&salpkcs.PKCS{

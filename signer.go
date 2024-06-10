@@ -126,7 +126,7 @@ func (s *SigningMethodCryptoSigner) Sign(signingString string, key interface{}) 
 	var signedBytes []byte
 	if s.alg == "PS256" {
 		opts := &rsa.PSSOptions{
-			Hash:       crypto.SHA256,
+			Hash:       s.Hash(),
 			SaltLength: rsa.PSSSaltLengthAuto,
 		}
 		signedBytes, err = config.Signer.Sign(rng, hashed, opts)
@@ -135,7 +135,7 @@ func (s *SigningMethodCryptoSigner) Sign(signingString string, key interface{}) 
 		}
 	} else if s.alg == "ES256" {
 
-		signedBytes, err = config.Signer.Sign(rng, hashed, crypto.SHA256)
+		signedBytes, err = config.Signer.Sign(rng, hashed, s.Hash())
 		if err != nil {
 			return nil, fmt.Errorf(" error from signing from : %v", err)
 		}
@@ -158,7 +158,7 @@ func (s *SigningMethodCryptoSigner) Sign(signingString string, key interface{}) 
 		sigStruct.S.FillBytes(out[keyBytes:])
 		return out, nil
 	} else if s.alg == "RS256" {
-		signedBytes, err = config.Signer.Sign(rng, hashed, crypto.SHA256)
+		signedBytes, err = config.Signer.Sign(rng, hashed, s.Hash())
 		if err != nil {
 			return nil, fmt.Errorf(" error from signing from : %v", err)
 		}

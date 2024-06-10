@@ -26,6 +26,9 @@ func main() {
 
 	// ===================================  RSA  PSS
 
+	// i'm just using a plain rsa key which implements the singer.
+	// see the README.md in this repo for examples with TPM, KMS, PKCS-11
+
 	// demo signer RSA
 	pssprivatePEM, err := os.ReadFile("certs/client_rsa_pss.key")
 	if err != nil {

@@ -2,52 +2,45 @@ package main
 
 import (
 	"context"
-	"crypto/x509"
-	"encoding/pem"
 	"fmt"
 	"log"
-	"os"
 	"time"
 
 	//"github.com/go-piv/piv-go/piv"
 
+	"github.com/ThalesIgnite/crypto11"
 	jwt "github.com/golang-jwt/jwt/v5"
 	jwtsigner "github.com/salrashid123/golang-jwt-signer"
-	// salkms "github.com/salrashid123/signer/kms"
-	// saltpm "github.com/salrashid123/signer/tpm"
-	// "github.com/ThalesIgnite/crypto11"
-	// salpkcs "github.com/salrashid123/mtls_pkcs11/signer/pkcs"
+
+	salpkcs "github.com/salrashid123/mtls_pkcs11/signer/pkcs"
 )
 
 var ()
+
+// export SOFTHSM2_CONF=/tmp/softhsm.conf
 
 func main() {
 
 	ctx := context.Background()
 
-	// first initialize a crypto.Signer
+	config := &crypto11.Config{
+		Path:       "/usr/lib/x86_64-linux-gnu/softhsm/libsofthsm2.so",
+		TokenLabel: "token1",
+		Pin:        "mynewpin",
+	}
 
-	// i'm just using a plain rsa key which implements the singer.
-	// see the README.md in this repo for examples with TPM, KMS, PKCS-11
-
-	// demo signer RSA
-	privatePEM, err := os.ReadFile("certs/client_rsa.key")
+	cctx, err := crypto11.Configure(config)
 	if err != nil {
-		fmt.Printf("error getting signer %v", err)
-		os.Exit(0)
+		fmt.Println(err)
+		return
 	}
-	rblock, _ := pem.Decode(privatePEM)
-	if rblock == nil {
-		fmt.Printf("error getting signer %v", err)
-		os.Exit(0)
-	}
-	r, err := x509.ParsePKCS1PrivateKey(rblock.Bytes)
-	if err != nil {
-		fmt.Printf("error getting signer %v", err)
-		os.Exit(0)
-	}
+	defer cctx.Close()
 
-	// ===================================  RSA
+	r, err := salpkcs.NewPKCSCrypto(&salpkcs.PKCS{
+		Context:   cctx,
+		PkcsId:    nil,                 //softhsm
+		PkcsLabel: []byte("keylabel1"), //softhsm
+	})
 
 	claims := &jwt.RegisteredClaims{
 		ExpiresAt: &jwt.NumericDate{time.Now().Add(time.Minute * 1)},

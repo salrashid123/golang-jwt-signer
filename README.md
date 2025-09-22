@@ -22,15 +22,16 @@ For other references, see:
 * [golang-jwt for Trusted Platform Module TPM](https://github.com/salrashid123/golang-jwt-tpm)
 * [golang-jwt for Yubikey](https://github.com/salrashid123/golang-jwt-yubikey)
 * [golang-jwt for PKCS11](https://github.com/salrashid123/golang-jwt-pkcs11)
-* [golang-jwt for TPM](https://github.com/salrashid123/golang-jwt-tpm)
 * [crypto.Signer, implementations for Google Cloud KMS and Trusted Platform Modules](https://github.com/salrashid123/signer)
 * [go-tpm-tools Signer](https://pkg.go.dev/github.com/google/go-tpm-tools/client#Key.GetSigner)
 
 ### Supported Algorithms
 
-* `RS256`
-* `PS256`
-* `ES256`
+* `RS256` `RS384` `RS512`
+
+* `PS256` `PS384` `PS512`
+
+* `ES256` `ES384` `ES512`
 
 ### Usage
 
@@ -47,10 +48,10 @@ import (
 	jwt "github.com/golang-jwt/jwt/v5"
 	jwtsigner "github.com/salrashid123/golang-jwt-signer"
 
-	// salkms "github.com/salrashid123/signer/kms"
-	// saltpm "github.com/salrashid123/signer/tpm"
-	// "github.com/ThalesIgnite/crypto11"
-	// salpkcs "github.com/salrashid123/mtls_pkcs11/signer/pkcs"
+	// salkms "github.com/salrashid123/kms_golang_signer"
+	// saltpm "github.com/salrashid123/tpmsigner"
+	// "github.com/ThalesGroup/crypto11"
+	// salpkcs "github.com/salrashid123/pkcssigner"
 )
 
 var ()

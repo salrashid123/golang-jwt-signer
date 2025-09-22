@@ -8,11 +8,11 @@ import (
 
 	//"github.com/go-piv/piv-go/piv"
 
-	"github.com/ThalesIgnite/crypto11"
+	"github.com/ThalesGroup/crypto11"
 	jwt "github.com/golang-jwt/jwt/v5"
 	jwtsigner "github.com/salrashid123/golang-jwt-signer"
 
-	salpkcs "github.com/salrashid123/mtls_pkcs11/signer/pkcs"
+	salpkcs "github.com/salrashid123/pkcssigner"
 )
 
 var ()

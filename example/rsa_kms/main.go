@@ -10,7 +10,7 @@ import (
 
 	jwt "github.com/golang-jwt/jwt/v5"
 	jwtsigner "github.com/salrashid123/golang-jwt-signer"
-	salkms "github.com/salrashid123/signer/kms"
+	salkms "github.com/salrashid123/kms_golang_signer"
 )
 
 var ()

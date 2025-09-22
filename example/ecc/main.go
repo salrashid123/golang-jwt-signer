@@ -9,13 +9,8 @@ import (
 	"os"
 	"time"
 
-	//"github.com/go-piv/piv-go/piv"
 	jwt "github.com/golang-jwt/jwt/v5"
 	jwtsigner "github.com/salrashid123/golang-jwt-signer"
-	// salkms "github.com/salrashid123/signer/kms"
-	// saltpm "github.com/salrashid123/signer/tpm"
-	// "github.com/ThalesIgnite/crypto11"
-	// salpkcs "github.com/salrashid123/mtls_pkcs11/signer/pkcs"
 )
 
 var ()

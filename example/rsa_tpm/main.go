@@ -9,15 +9,11 @@ import (
 	"slices"
 	"time"
 
-	//"github.com/go-piv/piv-go/piv"
-
 	jwt "github.com/golang-jwt/jwt/v5"
 	"github.com/google/go-tpm-tools/client"
 	"github.com/google/go-tpm-tools/simulator"
 	"github.com/google/go-tpm/tpmutil"
 	jwtsigner "github.com/salrashid123/golang-jwt-signer"
-	//"github.com/google/go-tpm-tools/client"
-	// saltpm "github.com/salrashid123/signer/tpm"
 )
 
 var ()

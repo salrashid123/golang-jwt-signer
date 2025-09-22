@@ -28,10 +28,18 @@ func (k *SignerConfig) GetPublicKey() crypto.PublicKey {
 
 var (
 	SigningMethodSignerRS256 *SigningMethodCryptoSigner
+	SigningMethodSignerRS384 *SigningMethodCryptoSigner
+	SigningMethodSignerRS512 *SigningMethodCryptoSigner
+
 	SigningMethodSignerPS256 *SigningMethodCryptoSigner
+	SigningMethodSignerPS384 *SigningMethodCryptoSigner
+	SigningMethodSignerPS512 *SigningMethodCryptoSigner
+
 	SigningMethodSignerES256 *SigningMethodCryptoSigner
-	errMissingConfig         = errors.New("signer: missing configuration in provided context")
-	errMissingSigner         = errors.New("signer: Signer not available")
+	SigningMethodSignerES384 *SigningMethodCryptoSigner
+	SigningMethodSignerES512 *SigningMethodCryptoSigner
+
+	errMissingConfig = errors.New("signer: missing configuration in provided context")
 )
 
 type SigningMethodCryptoSigner struct {
@@ -60,14 +68,24 @@ func init() {
 		return SigningMethodSignerRS256
 	})
 
-	// ES256
-	SigningMethodSignerES256 = &SigningMethodCryptoSigner{
-		"SignerES256",
-		jwt.SigningMethodES256,
-		crypto.SHA256,
+	// RS384
+	SigningMethodSignerRS384 = &SigningMethodCryptoSigner{
+		"SignerRS384",
+		jwt.SigningMethodRS384,
+		crypto.SHA384,
 	}
-	jwt.RegisterSigningMethod(SigningMethodSignerES256.Alg(), func() jwt.SigningMethod {
-		return SigningMethodSignerES256
+	jwt.RegisterSigningMethod(SigningMethodSignerRS384.Alg(), func() jwt.SigningMethod {
+		return SigningMethodSignerRS384
+	})
+
+	// RS512
+	SigningMethodSignerRS512 = &SigningMethodCryptoSigner{
+		"SignerRS512",
+		jwt.SigningMethodRS512,
+		crypto.SHA512,
+	}
+	jwt.RegisterSigningMethod(SigningMethodSignerRS512.Alg(), func() jwt.SigningMethod {
+		return SigningMethodSignerRS512
 	})
 
 	// PS256
@@ -78,6 +96,56 @@ func init() {
 	}
 	jwt.RegisterSigningMethod(SigningMethodSignerPS256.Alg(), func() jwt.SigningMethod {
 		return SigningMethodSignerPS256
+	})
+
+	// PS384
+	SigningMethodSignerPS384 = &SigningMethodCryptoSigner{
+		"SignerPS384",
+		jwt.SigningMethodPS384,
+		crypto.SHA384,
+	}
+	jwt.RegisterSigningMethod(SigningMethodSignerPS384.Alg(), func() jwt.SigningMethod {
+		return SigningMethodSignerPS384
+	})
+
+	// PS512
+	SigningMethodSignerPS512 = &SigningMethodCryptoSigner{
+		"SignerPS512",
+		jwt.SigningMethodPS512,
+		crypto.SHA512,
+	}
+	jwt.RegisterSigningMethod(SigningMethodSignerPS512.Alg(), func() jwt.SigningMethod {
+		return SigningMethodSignerPS512
+	})
+
+	// ES256
+	SigningMethodSignerES256 = &SigningMethodCryptoSigner{
+		"SignerES256",
+		jwt.SigningMethodES256,
+		crypto.SHA256,
+	}
+	jwt.RegisterSigningMethod(SigningMethodSignerES256.Alg(), func() jwt.SigningMethod {
+		return SigningMethodSignerES256
+	})
+
+	// ES384
+	SigningMethodSignerES384 = &SigningMethodCryptoSigner{
+		"SignerES384",
+		jwt.SigningMethodES384,
+		crypto.SHA384,
+	}
+	jwt.RegisterSigningMethod(SigningMethodSignerES384.Alg(), func() jwt.SigningMethod {
+		return SigningMethodSignerES384
+	})
+
+	// ES512
+	SigningMethodSignerES512 = &SigningMethodCryptoSigner{
+		"SignerES512",
+		jwt.SigningMethodES512,
+		crypto.SHA512,
+	}
+	jwt.RegisterSigningMethod(SigningMethodSignerES512.Alg(), func() jwt.SigningMethod {
+		return SigningMethodSignerES512
 	})
 
 }
@@ -124,7 +192,8 @@ func (s *SigningMethodCryptoSigner) Sign(signingString string, key interface{}) 
 	rng := rand.Reader
 
 	var signedBytes []byte
-	if s.alg == "PS256" {
+	switch s.alg {
+	case "PS256", "PS384", "PS512":
 		opts := &rsa.PSSOptions{
 			Hash:       s.Hash(),
 			SaltLength: rsa.PSSSaltLengthAuto,
@@ -133,7 +202,7 @@ func (s *SigningMethodCryptoSigner) Sign(signingString string, key interface{}) 
 		if err != nil {
 			return nil, fmt.Errorf(" error from signing from : %v", err)
 		}
-	} else if s.alg == "ES256" {
+	case "ES256", "ES384", "ES512":
 
 		signedBytes, err = config.Signer.Sign(rng, hashed, s.Hash())
 		if err != nil {
@@ -157,12 +226,12 @@ func (s *SigningMethodCryptoSigner) Sign(signingString string, key interface{}) 
 		sigStruct.R.FillBytes(out[0:keyBytes])
 		sigStruct.S.FillBytes(out[keyBytes:])
 		return out, nil
-	} else if s.alg == "RS256" {
+	case "RS256", "RS384", "RS512":
 		signedBytes, err = config.Signer.Sign(rng, hashed, s.Hash())
 		if err != nil {
 			return nil, fmt.Errorf(" error from signing from : %v", err)
 		}
-	} else {
+	default:
 		return nil, fmt.Errorf("unsupported signature type %v", s.alg)
 	}
 
